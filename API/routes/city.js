@@ -13,6 +13,16 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Rotas para listar cidades por estado
+router.get('/:state', async (req, res) => {
+    try {
+        const cities = await City.find({ state: req.params.state });
+        res.status(200).json(cities);
+    } catch (err) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 // Rota para criar uma cidade
 router.post('/', async (req, res) => {
     let { name, state } = req.body;
