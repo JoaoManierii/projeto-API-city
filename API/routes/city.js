@@ -3,7 +3,7 @@ const router = express.Router();
 const City = require('../model/city'); // Importa o model City
 
 
-
+// Rota para listar todas as cidades
 router.get('/', async (req, res) => {
     try {
         const cities = await City.find({});
@@ -13,11 +13,12 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Rota para criar uma cidade
 router.post('/', async (req, res) => {
     let { name, state } = req.body;
     try {
         const city = await City.create({ name, state });
-        res.status(200).json(city);
+        return res.status(200).json(city);
     } catch (err) {
         res.status(500).json({ error: 'Internal server error' });
     }
