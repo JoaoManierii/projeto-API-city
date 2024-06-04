@@ -12,6 +12,16 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Rotas para listar clientes por id
+router.get('/:id', async (req, res) => {
+    try {
+        const clients = await Client.find({ id: req.params.id });
+        res.status(200).json(clients);
+    } catch (err) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 // Rotas para listar clientes por nome
 router.get('/:name', async (req, res) => {
     try {
