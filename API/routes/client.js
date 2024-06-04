@@ -25,14 +25,16 @@ router.get('/:name', async (req, res) => {
 
 // Rota para criar um cliente
 router.post('/', async (req, res) => {
-    let { name, sex, born, age, city } = req.body;
+    let { id, name, sex, born, age, city } = req.body;
     try {
-        const client = await Client.create({ name, sex, born, age, city });
+        const client = await Client.create({ id, name, sex, born, age, city });
         return res.status(200).json(client);
     } catch (err) {
-        res.status(500).json({ error: 'Internal server error' });
+        console.error('Erro ao criar cliente:', err); // Adiciona log detalhado do erro
+        return res.status(500).json({ error: 'Erro ao criar cliente', details: err.message });
     }
 });
+
 
 module.exports = router;
 
