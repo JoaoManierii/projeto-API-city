@@ -50,11 +50,11 @@ router.put('/:id', async (req, res) => {
     const { name } = req.body;
 
     if (!name) {
-        return res.status(400).json({ error: 'Name is required' });
+        return res.status(400).json({ error: 'Campo vazio' });
     }
 
     try {
-        const client = await Client.findOneAndUpdate({ id: req.params.id }, { name }, { new: true }
+        const client = await Client.findOneAndUpdate({ id: req.params.id }, { name }
         );
 
         if (!client) {
@@ -63,7 +63,7 @@ router.put('/:id', async (req, res) => {
 
         return res.status(200).json(client);
     } catch (err) {
-        console.error('Erro ao atualizar cliente:', err); // Detailed error log
+        console.error('Erro ao atualizar cliente:', err); 
         return res.status(500).json({ error: 'Erro ao atualizar cliente', details: err.message });
     }
 });
