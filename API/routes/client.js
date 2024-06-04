@@ -1,6 +1,6 @@
-const express = require('express'); 
+const express = require('express');
 const router = express.Router();
-const Client = require('../model/client'); 
+const Client = require('../model/client');
 
 // Rota para listar todos os clientes
 router.get('/', async (req, res) => {
@@ -42,6 +42,20 @@ router.post('/', async (req, res) => {
     } catch (err) {
         console.error('Erro ao criar cliente:', err); // Adiciona log detalhado do erro
         return res.status(500).json({ error: 'Erro ao criar cliente', details: err.message });
+    }
+});
+
+// Rota para remover um cliente
+router.delete('/:id', async (req, res) => {
+    try {
+        const client = await Client.findOneAndDelete({ id: req.params.id });
+        if (!client) {
+            return res.status(404).json({ error: 'Cliente não encontrado' });
+        }
+        return res.status(200).json(client);
+    } catch (err) {
+        console.error('Erro ao remover cliente:', err); // Adiciona log detalhado do erro
+        return res.status(500).json({ error: 'Erro ao remover cliente', details: err.message });
     }
 });
 
