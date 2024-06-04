@@ -45,6 +45,30 @@ router.post('/', async (req, res) => {
     }
 });
 
+// Rota para atualizar o nome de um cliente
+router.put('/:id', async (req, res) => {
+    const { name } = req.body;
+
+    if (!name) {
+        return res.status(400).json({ error: 'Name is required' });
+    }
+
+    try {
+        const client = await Client.findOneAndUpdate({ id: req.params.id }, { name }, { new: true }
+        );
+
+        if (!client) {
+            return res.status(404).json({ error: 'Cliente não encontrado' });
+        }
+
+        return res.status(200).json(client);
+    } catch (err) {
+        console.error('Erro ao atualizar cliente:', err); // Detailed error log
+        return res.status(500).json({ error: 'Erro ao atualizar cliente', details: err.message });
+    }
+});
+
+
 // Rota para remover um cliente
 router.delete('/:id', async (req, res) => {
     try {
