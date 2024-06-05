@@ -25,8 +25,8 @@ router.get('/:id', async (req, res) => {
 // Rotas para listar clientes por nome
 router.get('/:name', async (req, res) => {
     try {
-        const clients = await Client.find({ name: req.params.name });
-        res.status(200).json(clients);
+        const clients = await Client.find({ name: req.params.name }); 
+        res.status(200).json(clients); 
     } catch (err) {
         res.status(500).json({ error: 'Internal server error' });
     }
@@ -49,12 +49,13 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
     const { name } = req.body;
 
+    // Verifica se o campo name está vazio
     if (!name) {
         return res.status(400).json({ error: 'Campo vazio' });
     }
 
     try {
-        const client = await Client.findOneAndUpdate({ id: req.params.id }, { name }
+        const client = await Client.findOneAndUpdate({ id: req.params.id }, { name } 
         );
 
         if (!client) {
@@ -70,13 +71,13 @@ router.put('/:id', async (req, res) => {
 
 
 // Rota para remover um cliente
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => { 
     try {
         const client = await Client.findOneAndDelete({ id: req.params.id });
         if (!client) {
-            return res.status(404).json({ error: 'Cliente não encontrado' });
+            return res.status(404).json({ error: 'Cliente não encontrado' }); // Retorna erro se o cliente não for encontrado
         }
-        return res.status(200).json(client);
+        return res.status(200).json(client); // Retorna o cliente removido
     } catch (err) {
         console.error('Erro ao remover cliente:', err); // Adiciona log detalhado do erro
         return res.status(500).json({ error: 'Erro ao remover cliente', details: err.message });

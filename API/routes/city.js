@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
 router.get('/:name', async (req, res) => {
     try {
         const cities = await City.find({ name: req.params.name });
-        res.status(200).json(cities);
+        res.status(200).json(cities); 
     } catch (err) {
         res.status(500).json({ error: 'Internal server error' });
     }
