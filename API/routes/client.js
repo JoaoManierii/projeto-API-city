@@ -23,10 +23,10 @@ router.get('/:id', async (req, res) => {
 });
 
 // Rotas para listar clientes por nome
-router.get('/:name', async (req, res) => {
+router.get('/name/:name', async (req, res) => {
     try {
-        const clients = await Client.find({ name: req.params.name }); 
-        res.status(200).json(clients); 
+        const clients = await Client.find({ name: req.params.name });
+        res.status(200).json(clients);
     } catch (err) {
         res.status(500).json({ error: 'Internal server error' });
     }

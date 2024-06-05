@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Management</title>
+</head>
+<body>
+    <h1>Client Management</h1>
+
+    <section>
+        <h2>Todos os Clientes</h2>
+        <button onclick="fetchClients()">Buscar Todos os Clientes</button>
+        <!-- o Campo pre eh onde o json vai ser "printado" -->
+        <pre id="clients"></pre> 
+    </section>
+
+    <section>
+        <h2>Buscar Cliente por ID</h2>
+        <input type="text" id="clientId" placeholder="Digite o ID do cliente">
+        <button onclick="searchById()">Buscar por ID</button>
+        <pre id="searchResultsId"></pre>
+    </section>
+
+    <section>
+        <h2>Buscar Cliente por Nome</h2>
+        <input type="text" id="clientName" placeholder="Digite o nome do cliente">
+        <button onclick="searchByName()">Buscar por Nome</button>
+        <pre id="searchResultsName"></pre>
+    </section>
+
+    <section>
+        <h2>Criar Novo Cliente</h2>
+        <input type="text" id="newClientId" placeholder="Digite o ID do cliente">
+        <input type="text" id="newClientName" placeholder="Digite o nome do cliente">
+        <input type="text" id="newClientSex" placeholder="Digite o sexo do cliente">
+        <input type="date" id="newClientBorn" placeholder="Digite a data de nascimento do cliente">
+        <input type="number" id="newClientAge" placeholder="Digite a idade do cliente">
+        <input type="text" id="newClientCity" placeholder="Digite a cidade do cliente">
+        <button onclick="createClient()">Criar Cliente</button>
+        <pre id="createResult"></pre>
+    </section>
+
+    <section>
+        <h2>Atualizar Nome do Cliente</h2>
+        <input type="text" id="updateClientId" placeholder="Digite o ID do cliente">
+        <input type="text" id="updateClientName" placeholder="Digite o novo nome do cliente">
+        <button onclick="updateClientName()">Atualizar Nome</button>
+        <pre id="updateResult"></pre>
+    </section>
+
+    <section>
+        <h2>Deletar Cliente</h2>
+        <input type="text" id="deleteClientId" placeholder="Digite o ID do cliente">
+        <button onclick="deleteClient()">Deletar Cliente</button>
+        <pre id="deleteResult"></pre>
+    </section>
+
+    <script>
+        async function fetchClients() {
+            const response = await fetch('/api/client/');
+            if (response.ok) {
+                const clients = await response.json();
+                document.getElementById('clients').innerHTML = JSON.stringify(clients, null, 2);
+            } else {
+                document.getElementById('clients').innerHTML = 'Erro ao buscar clientes';
+            }
+        }
+
+        async function searchById() {
+            const id = document.getElementById('clientId').value;
+            const response = await fetch(`/api/client/${id}`);
+            if (response.ok) {
+                const clients = await response.json();
+                document.getElementById('searchResultsId').innerHTML = JSON.stringify(clients, null, 2);
+            } else {
+                document.getElementById('searchResultsId').innerHTML = 'Erro ao buscar cliente por ID';
+            }
+        }
+
+        async function searchByName() {
+            const name = document.getElementById('clientName').value;
+            const response = await fetch(`/api/client/name/${name}`);
+            if (response.ok) {
+                const clients = await response.json();
+                document.getElementById('searchResultsName').innerHTML = JSON.stringify(clients, null, 2);
+            } else {
+                document.getElementById('searchResultsName').innerHTML = 'Erro ao buscar cliente por nome';
+            }
+        }
+
+        async function createClient() {
+            const id = document.getElementById('newClientId').value;
+            const name = document.getElementById('newClientName').value;
+            const sex = document.getElementById('newClientSex').value;
+            const born = document.getElementById('newClientBorn').value;
+            const age = document.getElementById('newClientAge').value;
+            const city = document.getElementById('newClientCity').value;
+
+            const response = await fetch('/api/client/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id, name, sex, born, age, city })
+            });
+            if (response.ok) {
+                const client = await response.json();
+                document.getElementById('createResult').innerHTML = JSON.stringify(client, null, 2);
+            } else {
+                document.getElementById('createResult').innerHTML = 'Erro ao criar cliente';
+            }
+        }
+
+        async function updateClientName() {
+            const id = document.getElementById('updateClientId').value;
+            const name = document.getElementById('updateClientName').value;
+            const response = await fetch(`/api/client/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name })
+            });
+            if (response.ok) {
+                const client = await response.json();
+                document.getElementById('updateResult').innerHTML = JSON.stringify(client, null, 2);
+            } else {
+                document.getElementById('updateResult').innerHTML = 'Erro ao atualizar nome do cliente';
+            }
+        }
+
+        async function deleteClient() {
+            const id = document.getElementById('deleteClientId').value;
+            const response = await fetch(`/api/client/${id}`, {
+                method: 'DELETE'
+            });
+            if (response.ok) {
+                const client = await response.json();
+                document.getElementById('deleteResult').innerHTML = JSON.stringify(client, null, 2);
+            } else {
+                document.getElementById('deleteResult').innerHTML = 'Erro ao deletar cliente';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Management</title>
+</head>
+<body>
+    <h1>City Management</h1>
+
+    <section>
+        <h2>Todas as Cidades</h2>
+        <button onclick="fetchCities()">Buscar Todas as Cidades</button>
+        <!-- o Campo pre eh onde o json vai ser "printado" -->
+        <pre id="cities"></pre>
+    </section>
+
+    <section>
+        <h2>Buscar Cidades por Nome</h2>
+        <input type="text" id="cityName" placeholder="Digite o nome da cidade">
+        <button onclick="searchByName()">Buscar por Nome</button>
+        <pre id="searchResults"></pre>
+    </section>
+
+    <section>
+        <h2>Buscar Cidades por Estado</h2>
+        <input type="text" id="cityState" placeholder="Digite o estado">
+        <button onclick="searchByState()">Buscar por Estado</button>
+        <pre id="searchResultsState"></pre>
+    </section>
+
+    <section>
+        <h2>Criar Nova Cidade</h2>
+        <input type="text" id="newCityName" placeholder="Digite o nome da cidade">
+        <input type="text" id="newCityState" placeholder="Digite o estado">
+        <button onclick="createCity()">Criar Cidade</button>
+        <pre id="createResult"></pre>
+    </section>
+
+    <script>
+        async function fetchCities() {
+            const response = await fetch('/api/city');
+            if (response.ok) {
+                const cities = await response.json();
+                document.getElementById('cities').innerHTML = JSON.stringify(cities, null, 2);
+            } else {
+                document.getElementById('cities').innerHTML = 'Erro ao buscar cidades';
+            }
+        }
+
+        async function searchByName() {
+            const name = document.getElementById('cityName').value;
+            const response = await fetch(`/api/city/name/${name}`);
+            if (response.ok) {
+                const cities = await response.json();
+                document.getElementById('searchResults').innerHTML = JSON.stringify(cities, null, 2);
+            } else {
+                document.getElementById('searchResults').innerHTML = 'Erro ao buscar cidades por nome';
+            }
+        }
+
+        async function searchByState() {
+            const state = document.getElementById('cityState').value;
+            const response = await fetch(`/api/city/state/${state}`);
+            if (response.ok) {
+                const cities = await response.json();
+                document.getElementById('searchResultsState').innerHTML = JSON.stringify(cities, null, 2);
+            } else {
+                document.getElementById('searchResultsState').innerHTML = 'Erro ao buscar cidades por estado';
+            }
+        }
+
+        async function createCity() {
+            const name = document.getElementById('newCityName').value;
+            const state = document.getElementById('newCityState').value;
+            const response = await fetch('/api/city', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, state })
+            });
+            if (response.ok) {
+                const city = await response.json();
+                document.getElementById('createResult').innerHTML = JSON.stringify(city, null, 2);
+            } else {
+                document.getElementById('createResult').innerHTML = 'Erro ao criar cidade';
+            }
+        }
+    </script>
+</body>
+</html>
