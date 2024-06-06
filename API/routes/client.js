@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Client = require('../model/client');
+const axios = require('axios');
 
 // Rota para listar todos os clientes
 router.get('/', async (req, res) => {
@@ -37,13 +38,24 @@ router.get('/name/:name', async (req, res) => {
 router.post('/', async (req, res) => {
     let { id, name, sex, born, age, city } = req.body;
     // Previne que campos vazios sejam inseridos
-    if (!id || !name || ! sex || !born || !age || !city) {
+    if (!id || !name || !sex || !born || !age || !city) {
         return res.status(400).json({ error: 'Campo vazio' });
     }
     try {
+        // Antes de criar o cliente, verificamos se a cidade existe
+        // Nao sei se esse era o melhor jeito de fazer isso, mas foi o que eu consegui pensar
+        const response = await axios.get(`http://localhost:3000/api/city/name/${city}`);
+        if (!response.data || response.data.length === 0) {
+            return res.status(400).json({ error: 'Cidade não encontrada' });
+        }
+        // Se a cidade existir, criamos o cliente
         const client = await Client.create({ id, name, sex, born, age, city });
-        return res.status(200).json(client);
+        return res.status(201).json(client);
     } catch (err) {
+        if (err.response && err.response.status === 400) {
+            // Se a cidade não for encontrada, retornamos a resposta apropriada
+            return res.status(400).json({ error: 'Cidade não encontrada' });
+        }
         console.error('Erro ao criar cliente:', err); // Adiciona log detalhado do erro
         return res.status(500).json({ error: 'Erro ao criar cliente', details: err.message });
     }

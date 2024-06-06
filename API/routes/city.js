@@ -41,7 +41,7 @@ router.post('/', async (req, res) => {
     }
     try {
         const city = await City.create({ name, state });
-        res.status(200).json(city);
+        res.status(201).json(city);
     } catch (err) {
         res.status(500).json({ error: 'Erro interno do servidor' });
     }

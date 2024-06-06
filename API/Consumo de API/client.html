@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Client Management</title>
 </head>
+
 <body>
     <h1>Client Management</h1>
 
@@ -12,7 +14,7 @@
         <h2>Todos os Clientes</h2>
         <button onclick="fetchClients()">Buscar Todos os Clientes</button>
         <!-- o Campo pre eh onde o json vai ser "printado" -->
-        <pre id="clients"></pre> 
+        <pre id="clients"></pre>
     </section>
 
     <section>
@@ -36,10 +38,14 @@
         <input type="text" id="newClientSex" placeholder="Digite o sexo do cliente">
         <input type="date" id="newClientBorn" placeholder="Digite a data de nascimento do cliente">
         <input type="number" id="newClientAge" placeholder="Digite a idade do cliente">
-        <input type="text" id="newClientCity" placeholder="Digite a cidade do cliente">
+        <label for="cities">Escolha a cidade:</label>
+        <select id="cities">
+            <!-- Os options serão preenchidos dinamicamente com as cidades existentes -->
+        </select>
         <button onclick="createClient()">Criar Cliente</button>
         <pre id="createResult"></pre>
     </section>
+
 
     <section>
         <h2>Atualizar Nome do Cliente</h2>
@@ -57,15 +63,23 @@
     </section>
 
     <script>
-        async function fetchClients() {
-            const response = await fetch('/api/client/');
+        async function fetchCities() {
+            const response = await fetch('/api/city/');
             if (response.ok) {
-                const clients = await response.json();
-                document.getElementById('clients').innerHTML = JSON.stringify(clients, null, 2);
+                const cities = await response.json();
+                const select = document.getElementById('cities');
+                cities.forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city.name;
+                    option.text = city.name;
+                    select.appendChild(option);
+                });
             } else {
-                document.getElementById('clients').innerHTML = 'Erro ao buscar clientes';
+                console.error('Erro ao buscar cidades');
             }
         }
+        window.onload = fetchCities;
+
 
         async function searchById() {
             const id = document.getElementById('clientId').value;
@@ -144,4 +158,5 @@
         }
     </script>
 </body>
+
 </html>
