@@ -46,11 +46,11 @@ As funcionalidades dessa API incluem cadastrar cidades e clientes, consultar cid
 
 2. Inicie o servidor:
 
-   ```sh
-   npm start
+   ```node
+   node index.js
    ```
 
-3. Acesse a API no navegador ou via ferramentas como Postman ou cURL:
+3. Acesse a API no navegador via URL:
 
    ```
    Para utilizar o CRUD da cidade utilize:
@@ -61,6 +61,18 @@ As funcionalidades dessa API incluem cadastrar cidades e clientes, consultar cid
    ```
 
 OBS: pelo navegador tem uma interface sem estilizacao que te permite interagir com a API
+
+4. Acesse a API via Postman:
+
+   ```
+   Para utilizar o CRUD da cidade utilize:
+   http://localhost:3000/api/city
+   Para utilizar o CRUD do cliente utilize:
+   http://localhost:3000/api/client/
+
+   ```
+
+OBS: Coloquei chamadas de rotas diferentes para os 2 pois um renderiza o html e o outro "funciona" somente em ferramentas de teste como o postman
 
 ### Estrutura do Projeto
 
