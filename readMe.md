@@ -11,6 +11,12 @@ As funcionalidades dessa API incluem cadastrar cidades e clientes, consultar cid
 - Node.js instalado na sua máquina.
 - NPM (Node Package Manager) instalado na sua máquina.
 - MongoDB configurado e em execução.
+- Instalar as seguintes bibliotecas:
+ - npm install express 
+ - npm install axios
+ - npm install bodyparser  
+ - npm install mongoose
+
 
 ### Instalação
 
