@@ -23,7 +23,8 @@ As funcionalidades dessa API incluem cadastrar cidades e clientes, consultar cid
 2. Navegue até o diretório do projeto:
 
    ```sh
-   cd api-city
+   cd projeto-API-city
+   cd API
    ```
 
 3. Instale as dependências do projeto:
