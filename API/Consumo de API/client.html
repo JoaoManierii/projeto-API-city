@@ -63,24 +63,16 @@
     </section>
 
     <script>
-        async function fetchCities() {
-            const response = await fetch('/api/city/');
+        async function fetchClients() {
+            const response = await fetch('/api/client/');
             if (response.ok) {
-                const cities = await response.json();
-                const select = document.getElementById('cities');
-                cities.forEach(city => {
-                    const option = document.createElement('option');
-                    option.value = city.name;
-                    option.text = city.name;
-                    select.appendChild(option);
-                });
+                const clients = await response.json();
+                document.getElementById('clients').innerHTML = JSON.stringify(clients, null, 2);
             } else {
-                console.error('Erro ao buscar cidades');
+                document.getElementById('clients').innerHTML = 'Erro ao buscar clientes';
             }
         }
-        window.onload = fetchCities;
-
-
+     
         async function searchById() {
             const id = document.getElementById('clientId').value;
             const response = await fetch(`/api/client/${id}`);
@@ -125,6 +117,26 @@
                 document.getElementById('createResult').innerHTML = 'Erro ao criar cliente';
             }
         }
+
+        async function fetchCities() {
+            const response = await fetch('/api/city/');
+            if (response.ok) {
+                const cities = await response.json();
+                const select = document.getElementById('cities');
+                cities.forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city.name;
+                    option.text = city.name;
+                    select.appendChild(option);
+                });
+            } else {
+                console.error('Erro ao buscar cidades');
+            }
+        }
+        // Chama a função fetchCities() quando a página carregar para preencher o campo de seleção
+        window.onload = fetchCities;
+
+
 
         async function updateClientName() {
             const id = document.getElementById('updateClientId').value;

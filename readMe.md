@@ -41,7 +41,26 @@ As funcionalidades dessa API incluem cadastrar cidades e clientes, consultar cid
 
 ### Executando o Projeto
 
-1. Certifique-se de que o MongoDB (ou outro banco de dados que você estiver usando) está em execução.        
+1. Certifique-se de que o MongoDB  está em execução.  
+- Para popular o banco, voce pode utilizar os campos do formulario via URL ou objetos json no postman via metodo post, no seguinte formato:
+Para popular um cliente
+```sh
+  {
+        "id": 36,
+        "name": "Philipe",
+        "sex": "M",
+        "born": "2002-01-01",
+        "age": 22,
+        "city": "Timbo"
+    }
+```      
+Para popular uma cidade
+```sh
+  {
+        "name": Araraquara,
+        "state": "SP"
+    }
+```      
 
 
 2. Inicie o servidor:
