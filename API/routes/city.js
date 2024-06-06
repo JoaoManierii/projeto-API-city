@@ -35,6 +35,10 @@ router.get('/state/:state', async (req, res) => {
 // Rota para criar uma cidade
 router.post('/', async (req, res) => {
     const { name, state } = req.body;
+    // Verifica se os campos foram preenchidos
+    if (!name || !state) {
+        return res.status(400).json({ error: 'Preencha todos os campos' });
+    }
     try {
         const city = await City.create({ name, state });
         res.status(200).json(city);

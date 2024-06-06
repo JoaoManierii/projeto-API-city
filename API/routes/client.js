@@ -36,6 +36,10 @@ router.get('/name/:name', async (req, res) => {
 // Rota para criar um cliente
 router.post('/', async (req, res) => {
     let { id, name, sex, born, age, city } = req.body;
+    // Previne que campos vazios sejam inseridos
+    if (!id || !name || ! sex || !born || !age || !city) {
+        return res.status(400).json({ error: 'Campo vazio' });
+    }
     try {
         const client = await Client.create({ id, name, sex, born, age, city });
         return res.status(200).json(client);
