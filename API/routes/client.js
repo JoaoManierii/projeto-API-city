@@ -1,6 +1,6 @@
-const express = require('express'); 
+const express = require('express');
 const router = express.Router();
-const Client = require('../model/client'); 
+const Client = require('../model/client');
 
 // Rota para listar todos os clientes
 router.get('/', async (req, res) => {
@@ -12,8 +12,18 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Rotas para listar clientes por id
+router.get('/:id', async (req, res) => {
+    try {
+        const clients = await Client.find({ id: req.params.id });
+        res.status(200).json(clients);
+    } catch (err) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 // Rotas para listar clientes por nome
-router.get('/:name', async (req, res) => {
+router.get('/name/:name', async (req, res) => {
     try {
         const clients = await Client.find({ name: req.params.name });
         res.status(200).json(clients);
@@ -25,14 +35,59 @@ router.get('/:name', async (req, res) => {
 
 // Rota para criar um cliente
 router.post('/', async (req, res) => {
-    let { name, sex, born, age, city } = req.body;
+    let { id, name, sex, born, age, city } = req.body;
+    // Previne que campos vazios sejam inseridos
+    if (!id || !name || ! sex || !born || !age || !city) {
+        return res.status(400).json({ error: 'Campo vazio' });
+    }
     try {
-        const client = await Client.create({ name, sex, born, age, city });
+        const client = await Client.create({ id, name, sex, born, age, city });
         return res.status(200).json(client);
     } catch (err) {
-        res.status(500).json({ error: 'Internal server error' });
+        console.error('Erro ao criar cliente:', err); // Adiciona log detalhado do erro
+        return res.status(500).json({ error: 'Erro ao criar cliente', details: err.message });
     }
 });
+
+// Rota para atualizar o nome de um cliente
+router.put('/:id', async (req, res) => {
+    const { name } = req.body;
+
+    // Verifica se o campo name está vazio
+    if (!name) {
+        return res.status(400).json({ error: 'Campo vazio' });
+    }
+
+    try {
+        const client = await Client.findOneAndUpdate({ id: req.params.id }, { name } 
+        );
+
+        if (!client) {
+            return res.status(404).json({ error: 'Cliente não encontrado' });
+        }
+
+        return res.status(200).json(client);
+    } catch (err) {
+        console.error('Erro ao atualizar cliente:', err); 
+        return res.status(500).json({ error: 'Erro ao atualizar cliente', details: err.message });
+    }
+});
+
+
+// Rota para remover um cliente
+router.delete('/:id', async (req, res) => { 
+    try {
+        const client = await Client.findOneAndDelete({ id: req.params.id });
+        if (!client) {
+            return res.status(404).json({ error: 'Cliente não encontrado' }); // Retorna erro se o cliente não for encontrado
+        }
+        return res.status(200).json(client); // Retorna o cliente removido
+    } catch (err) {
+        console.error('Erro ao remover cliente:', err); // Adiciona log detalhado do erro
+        return res.status(500).json({ error: 'Erro ao remover cliente', details: err.message });
+    }
+});
+
 
 module.exports = router;
 
