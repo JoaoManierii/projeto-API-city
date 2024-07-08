@@ -594,3 +594,6 @@ app.listen(3000, () => {
     console.log("API RODANDO!");
 });
 ```
+
+#### Docker
+Na branch "teste-Docker" o arquivo docker-compose pode ser inicializado para testar a aplicacao com uma instancia Docker. Porem, como foi minha primeira vez testando as coisas em docker, nao sei se funcionou apropriadamente. Ainda em testes !
