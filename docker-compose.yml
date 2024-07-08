@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+  mongodb:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    networks:
+      - mongo-compose-network
+  adminer:
+    image: adminer:latest
+    ports:
+      - "8080:8080"
+    networks:
+      - mongo-compose-network
+  api:
+    image: node:latest
+    command: sh -c "npm install && npm start"
+    working_dir: /home/node/api
+    env_file:
+      - .env
+    ports:
+      - "${API_PORT}:3000"
+    volumes:
+      - ./api:/home/node/api
+    networks: 
+      - mongo-compose-network
+    depends_on:
+      - mongodb
+networks:
+  mongo-compose-network:
+    driver: bridge
